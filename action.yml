@@ -1,0 +1,30 @@
+name: "Merge Multi Branch"
+description: "Update multi branch from one branch"
+author: "Samuel Sosa"
+
+inputs:
+  github_token:
+    description: "Token used to authenticate with GitHub when performing the merge command."
+    required: true
+    default: ${{ github.token }}
+  source_ref:
+    description: "Branch name or Ref that you wish to merge into the target_branch."
+    required: true
+    default: ${{ github.ref }}
+  commit_message_template:
+    description: "Template to generate the commit message, see README.md for more info"
+    required: false
+    default: "Merged {source_ref} into {target_branch}."
+  slack_webhook:
+    description: "Webhook Slack send notification error "
+    required: true
+  slack_webhook_tag_user_id:
+    description: "Webhook Slack send notification error tag user"
+    required: false
+
+runs:
+  using: "node12"
+  main: "dist/index.js"
+branding:
+  icon: git-merge
+  color: green
