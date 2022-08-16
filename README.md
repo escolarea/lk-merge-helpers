@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: sosa-22/merge-multi-branch@main
+      - uses: escolarea/linker-merge-helpers@master
         with:
           github_token: ${{ github.token }}
           source_ref: ${{ github.ref }}
