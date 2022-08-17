@@ -51,4 +51,4 @@ branch protection rules.
 **Optional** - Customize the commit message that gets added to the merge commit.
 
 ### `slack_webhook_tag_user_id`
-**Optional** - Id de uno o mas  usuarios de slack que desee etiquetar en el mensaje, por ejemplo: "<@3L5K896SH><@U00757CL3><@UA09TESKP>"
+**Optional** - Id of one or more slack users you want to tag in the message, for example: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
