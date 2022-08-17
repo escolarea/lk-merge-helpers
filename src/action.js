@@ -85,7 +85,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
       icon_emoji: ":ghost:",
       attachments,
     };
-    await axios.post(slackWedHook, payload);
+    await axios.post(core.getInput("SLACK_WEBHOOK"), payload);
   } catch (error) {
     core.setFailed(`Error Slack: ${error.message}`);
   }
