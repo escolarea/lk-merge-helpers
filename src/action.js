@@ -3,7 +3,7 @@ const github = require("@actions/github");
 const core = require("@actions/core");
 
 async function run() {
-  const branchesError = "";
+  let branchesError = "";
   let branchesSuccess = "";
   try {
     const token = core.getInput("github_token");

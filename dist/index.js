@@ -14619,7 +14619,7 @@ const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 
 async function run() {
-  const branchesError = "";
+  let branchesError = "";
   let branchesSuccess = "";
   try {
     const token = core.getInput("github_token");
