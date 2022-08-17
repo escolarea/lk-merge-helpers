@@ -14649,7 +14649,7 @@ async function run() {
         };
         const response = await createMerge(config, octokit);
         if (response.success) {
-          branchesSuccess += `-    ${currentBranch.name}\n`;
+          branchesSuccess += `    - ${currentBranch.name}\n`;
         } else {
           branchesError += `    - ${currentBranch.name} from ${source_ref} \n     Error: ${response.message}\n`;
         }
@@ -14697,7 +14697,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
       username: "webhookbot",
       text: `Hi ${core.getInput(
         "slack_webhook_tag_user_id"
-      )} This is status of your auto-merge.`,
+      )} This is the status of your auto-merge.`,
       icon_emoji: ":ghost:",
       attachments,
     };

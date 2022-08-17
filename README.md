@@ -1,6 +1,8 @@
 # merge-multi-branch
-```
-name: Test
+
+
+```yaml
+name: Update stable branches
 
 on:
   push:
@@ -8,15 +10,45 @@ on:
       - develop
 
 jobs:
-  test:
+  auto_merge:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - uses: escolarea/linker-merge-helpers@master
+      - uses: escolarea/lk-merge-helpers@master
         with:
-          github_token: ${{ github.token }}
+          github_token: ${{ secrets.TOKEN }}
           source_ref: ${{ github.ref }}
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          slack_webhook_tag_user_id: "U03TWV6TNKR"
+          slack_webhook_tag_user_id: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
 ```
+
+
+## Inputs
+
+### `github_token`
+**Required** - The GitHub Personal Access Token used to perform the merge action. 
+This can be the [Token provided by GitHub Workflows](https://docs.github.com/en/actions/configuring-and-managing-workflows/authenticating-with-the-github_token), 
+or a custom token set at a [workflow secret](https://docs.github.com/en/actions/configuring-and-managing-workflows/creating-and-storing-encrypted-secrets).
+
+A custom token may be useful if performing actions that require Administrative privileges, such as overriding 
+branch protection rules.
+
+### `source_ref`
+**Required** - The source ref or branch name that you wish to merge into the `stables branches`.
+
+### `slack_webhook`
+**Required** 
+ ## Setup
+
+* [Create a Slack App][apps] for your workspace (alternatively use an existing app you have already created and installed).
+* Add the [`incoming-webhook`](https://api.slack.com/scopes/incoming-webhook).
+* Install the app to your workspace (you will select a channel to notify).
+* Activate and create a new webhook under **Incoming Webhooks**.
+* Copy the Webhook URL from the Webhook you just generated [add it as a secret in your repo settings][repo-secret] named `slack_webhook`.
+
+### `commit_message_template`
+**Optional** - Customize the commit message that gets added to the merge commit.
+
+### `slack_webhook_tag_user_id`
+**Optional** - Id de uno o mas  usuarios de slack que desee etiquetar en el mensaje, por ejemplo: "<@3L5K896SH><@U00757CL3><@UA09TESKP>"
