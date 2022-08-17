@@ -41,7 +41,7 @@ async function run() {
     }
     sendNotificationSlack(branchesSuccess, branchesError);
   } catch (e) {
-    core.setFailed(e.message);
+    core.setFailed(`Error Merge: ${e.message}`);
   }
 }
 
@@ -87,7 +87,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
     };
     await axios.post(slackWedHook, payload);
   } catch (error) {
-    core.setFailed(error.message);
+    core.setFailed(`Error Slack: ${error.message}`);
   }
 }
 
