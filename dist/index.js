@@ -14647,7 +14647,7 @@ async function run() {
           head: source_ref,
           commit_message: commitMessage,
         };
-        const response = await createMerge(config);
+        const response = await createMerge(config, octokit);
         if (response.success) {
           branchesSuccess += `- ${currentBranch.name}\n`;
         } else {
@@ -14680,7 +14680,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
     }
     if (branchesError) {
       attachments.push({
-        color: "#01a801",
+        color: "#bd0f26",
         blocks: [
           {
             type: "section",
@@ -14707,7 +14707,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
   }
 }
 
-async function createMerge(config) {
+async function createMerge(config, octokit) {
   const response = { success: true, message: "" };
   try {
     await octokit.rest.repos.merge(config);
