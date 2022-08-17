@@ -14619,7 +14619,8 @@ const github = __nccwpck_require__(5438);
 const core = __nccwpck_require__(2186);
 
 async function run() {
-  let branchActive = "";
+  const branchesError = "";
+  let branchesSuccess = "";
   try {
     const token = core.getInput("github_token");
     const source_ref = core.getInput("source_ref");
@@ -14636,40 +14637,85 @@ async function run() {
     for (const currentBranch of data) {
       let splitBranch = currentBranch.name.split("-");
       if (splitBranch.pop() === "stable") {
-        branchActive = currentBranch.name;
         let commitMessage = commit_message_template
           .replace("{source_ref}", source_ref)
           .replace("{target_branch}", currentBranch.name);
-
-        await octokit.rest.repos.merge({
+        const config = {
           owner: repo.owner,
           repo: repo.repo,
           base: currentBranch.name,
           head: source_ref,
           commit_message: commitMessage,
-        });
+        };
+        const response = await createMerge(config);
+        if (response.success) {
+          branchesSuccess += `- ${currentBranch.name}\n`;
+        } else {
+          branchesError += `- ${currentBranch.name} from ${source_ref} \n   Error: ${response.message}\n`;
+        }
       }
     }
+    sendNotificationSlack(branchesSuccess, branchesError);
   } catch (e) {
     core.setFailed(e.message);
-    sendNotificationSlack(core.getInput("SLACK_WEBHOOK"), branchActive);
   }
 }
 
-async function sendNotificationSlack(slackWedHook, branchActive) {
+async function sendNotificationSlack(branchesSuccess, branchesError) {
   try {
+    const attachments = [];
+    if (branchesSuccess) {
+      attachments.push({
+        color: "#01a801",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `✅  Auto Merge Success:\n  ${branchesSuccess}`,
+            },
+          },
+        ],
+      });
+    }
+    if (branchesError) {
+      attachments.push({
+        color: "#01a801",
+        blocks: [
+          {
+            type: "section",
+            text: {
+              type: "mrkdwn",
+              text: `⛔️ 🛑  Auto Merge Fail:\n  ${branchesError}`,
+            },
+          },
+        ],
+      });
+    }
+
     const payload = {
       username: "webhookbot",
-      text: `<@${core.getInput(
+      text: `Hi <@${core.getInput(
         "slack_webhook_tag_user_id"
-      )}> Failed to auto-merge your ${branchActive} branch from ${core.getInput(
-        "source_ref"
-      )}.`,
+      )}> This is status of your auto-merge.`,
       icon_emoji: ":ghost:",
+      attachments,
     };
-    axios.post(slackWedHook, payload);
+    await axios.post(slackWedHook, payload);
   } catch (error) {
     core.setFailed(error.message);
+  }
+}
+
+async function createMerge(config) {
+  const response = { success: true, message: "" };
+  try {
+    await octokit.rest.repos.merge(config);
+    return response;
+  } catch (error) {
+    response.success = false;
+    response.message = error.message;
+    return response;
   }
 }
 
