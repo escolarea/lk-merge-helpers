@@ -14649,9 +14649,9 @@ async function run() {
         };
         const response = await createMerge(config, octokit);
         if (response.success) {
-          branchesSuccess += `- ${currentBranch.name}\n`;
+          branchesSuccess += `-    ${currentBranch.name}\n`;
         } else {
-          branchesError += `- ${currentBranch.name} from ${source_ref} \n   Error: ${response.message}\n`;
+          branchesError += `    - ${currentBranch.name} from ${source_ref} \n     Error: ${response.message}\n`;
         }
       }
     }
@@ -14672,7 +14672,7 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
             type: "section",
             text: {
               type: "mrkdwn",
-              text: `✅  Auto Merge Success:\n  ${branchesSuccess}`,
+              text: `✅  *Auto Merge Success:*\n  ${branchesSuccess}`,
             },
           },
         ],
@@ -14695,9 +14695,9 @@ async function sendNotificationSlack(branchesSuccess, branchesError) {
 
     const payload = {
       username: "webhookbot",
-      text: `Hi <@${core.getInput(
+      text: `Hi ${core.getInput(
         "slack_webhook_tag_user_id"
-      )}> This is status of your auto-merge.`,
+      )} This is status of your auto-merge.`,
       icon_emoji: ":ghost:",
       attachments,
     };
