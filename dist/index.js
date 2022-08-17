@@ -14652,22 +14652,17 @@ async function run() {
     }
   } catch (e) {
     core.setFailed(e.message);
-    sendNotificationSlack(
-      "#desarrollo",
-      core.getInput("SLACK_WEBHOOK"),
-      branchActive
-    );
+    sendNotificationSlack(core.getInput("SLACK_WEBHOOK"), branchActive);
   }
 }
 
-async function sendNotificationSlack(channel, slackWedHook, branchActive) {
+async function sendNotificationSlack(slackWedHook, branchActive) {
   try {
     const payload = {
-      channel: channel,
       username: "webhookbot",
       text: `<@${core.getInput(
         "slack_webhook_tag_user_id"
-      )}> Failed to merge your ${branchActive} branch from ${core.getInput(
+      )}> Failed to auto-merge your ${branchActive} branch from ${core.getInput(
         "source_ref"
       )}.`,
       icon_emoji: ":ghost:",
