@@ -34,6 +34,13 @@ or a custom token set at a [workflow secret](https://docs.github.com/en/actions/
 A custom token may be useful if performing actions that require Administrative privileges, such as overriding 
 branch protection rules.
 
+Some permissions you must have are:
+
+-repo
+-workflow
+
+and make sure the token has write permissions to perform the action
+
 ### `source_ref`
 **Required** - The source ref or branch name that you wish to merge into the `stables branches`.
 
