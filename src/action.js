@@ -20,7 +20,8 @@ async function run() {
 
     for (const currentBranch of data) {
       let splitBranch = currentBranch.name.split("-");
-      if (splitBranch.pop() === "stable") {
+      let branchType = splitBranch.pop();
+      if (branchType === "stable" || branchType === "wip") {
         let commitMessage = commit_message_template
           .replace("{source_ref}", source_ref)
           .replace("{target_branch}", currentBranch.name);
