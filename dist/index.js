@@ -14626,6 +14626,9 @@ async function run() {
     const source_ref = core.getInput("source_ref");
     const commit_message_template = core.getInput("commit_message_template");
     const octokit = github.getOctokit(token);
+    const branchesAutomatically = core.getInput(
+      "branches_to_merge_automatically"
+    );
 
     const repo = github.context.repo;
 
@@ -14635,24 +14638,24 @@ async function run() {
     });
 
     for (const currentBranch of data) {
-      let splitBranch = currentBranch.name.split("-");
-      let branchType = splitBranch.pop();
-      if (branchType === "stable" || branchType === "wip") {
-        let commitMessage = commit_message_template
-          .replace("{source_ref}", source_ref)
-          .replace("{target_branch}", currentBranch.name);
-        const config = {
-          owner: repo.owner,
-          repo: repo.repo,
-          base: currentBranch.name,
-          head: source_ref,
-          commit_message: commitMessage,
-        };
-        const response = await createMerge(config, octokit);
-        if (response.success) {
-          branchesSuccess += `    - ${currentBranch.name}\n`;
-        } else {
-          branchesError += `    - ${currentBranch.name} from ${source_ref} \n     Error: ${response.message}\n`;
+      for (const element of branchesAutomatically) {
+        if (new RegExp(element).test(currentBranch)) {
+          let commitMessage = commit_message_template
+            .replace("{source_ref}", source_ref)
+            .replace("{target_branch}", currentBranch.name);
+          const config = {
+            owner: repo.owner,
+            repo: repo.repo,
+            base: currentBranch.name,
+            head: source_ref,
+            commit_message: commitMessage,
+          };
+          const response = await createMerge(config, octokit);
+          if (response.success) {
+            branchesSuccess += `    - ${currentBranch.name}\n`;
+          } else {
+            branchesError += `    - ${currentBranch.name} from ${source_ref} \n     Error: ${response.message}\n`;
+          }
         }
       }
     }
