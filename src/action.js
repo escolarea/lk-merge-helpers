@@ -22,10 +22,11 @@ async function run() {
       owner: repo.owner,
       repo: repo.repo,
     });
+    console.log("Lista de branch2:", formatBranch);
 
     for (const currentBranch of data) {
       for (const element of formatBranch) {
-        if (new RegExp(element).test(currentBranch)) {
+        if (new RegExp(element).test(currentBranch.name)) {
           let commitMessage = commit_message_template
             .replace("{source_ref}", source_ref)
             .replace("{target_branch}", currentBranch.name);
