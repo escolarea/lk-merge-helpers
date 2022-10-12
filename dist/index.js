@@ -14625,12 +14625,14 @@ async function run() {
     const token = core.getInput("github_token");
     const source_ref = core.getInput("source_ref");
     const commit_message_template = core.getInput("commit_message_template");
-    const octokit = github.getOctokit(token);
     const branchesAutomatically = core.getInput(
       "branches_to_merge_automatically"
     );
+    const octokit = github.getOctokit(token);
+
     console.log("Lista de branch:", branchesAutomatically);
     const repo = github.context.repo;
+    const formatBranch = branchesAutomatically.split(",");
 
     const { data } = await octokit.rest.repos.listBranches({
       owner: repo.owner,
@@ -14638,7 +14640,7 @@ async function run() {
     });
 
     for (const currentBranch of data) {
-      for (const element of branchesAutomatically) {
+      for (const element of formatBranch) {
         if (new RegExp(element).test(currentBranch)) {
           let commitMessage = commit_message_template
             .replace("{source_ref}", source_ref)
