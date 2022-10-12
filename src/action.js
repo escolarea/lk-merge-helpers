@@ -14,7 +14,6 @@ async function run() {
     );
     const octokit = github.getOctokit(token);
 
-    console.log("Lista de branch:", branchesAutomatically);
     const repo = github.context.repo;
     const formatBranch = branchesAutomatically.split(",");
 
@@ -22,7 +21,6 @@ async function run() {
       owner: repo.owner,
       repo: repo.repo,
     });
-    console.log("Lista de branch2:", formatBranch);
 
     for (const currentBranch of data) {
       for (const element of formatBranch) {
