@@ -18,6 +18,7 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN }}
           source_ref: ${{ github.ref }}
+          branches_to_merge_automatically: "/*-wip,develop,master"
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           slack_webhook_tag_user_id: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
