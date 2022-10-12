@@ -44,6 +44,10 @@ and make sure the token has write permissions to perform the action
 ### `source_ref`
 **Required** - The source ref or branch name that you wish to merge into the `stables branches`.
 
+### `branches_to_merge_automatically`
+**Required** -String with the name of the branches to merge separated by `,`
+for example: "develop,main,master"
+
 ### `slack_webhook`
 **Required** 
  ## Setup
