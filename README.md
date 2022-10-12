@@ -18,6 +18,7 @@ jobs:
         with:
           github_token: ${{ secrets.TOKEN }}
           source_ref: ${{ github.ref }}
+          branches_to_merge_automatically: "/*-wip,develop,master"
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
           slack_webhook_tag_user_id: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
@@ -43,6 +44,10 @@ and make sure the token has write permissions to perform the action
 
 ### `source_ref`
 **Required** - The source ref or branch name that you wish to merge into the `stables branches`.
+
+### `branches_to_merge_automatically`
+**Required** -String with the name of the branches to merge separated by `,`
+for example: "develop,main,master"
 
 ### `slack_webhook`
 **Required** 
