@@ -14,7 +14,6 @@ inputs:
   branches_to_merge_automatically:
     description: "Branch name or Ref that you wish to merge into the target_branch."
     required: true
-    default: ${{ github.ref }}
   commit_message_template:
     description: "Template to generate the commit message, see README.md for more info"
     required: false

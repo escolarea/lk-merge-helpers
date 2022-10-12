@@ -14629,7 +14629,7 @@ async function run() {
     const branchesAutomatically = core.getInput(
       "branches_to_merge_automatically"
     );
-
+    console.log("Lista de branch:", branchesAutomatically);
     const repo = github.context.repo;
 
     const { data } = await octokit.rest.repos.listBranches({
