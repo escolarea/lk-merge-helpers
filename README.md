@@ -21,7 +21,7 @@ jobs:
           branches_to_merge_automatically: "/*-wip,develop,master"
           commit_message_template: '[Automated] Merged {source_ref} into target {target_branch}'
           slack_webhook: ${{ secrets.SLACK_WEBHOOK }}
-          slack_webhook_tag_user_id: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
+          slack_webhook_tag_user_id: "<@SLACK_MEMBER_ID><@SLACK_MEMBER_ID><@SLACK_MEMBER_ID>"
 ```
 
 
@@ -63,4 +63,4 @@ for example: "develop,main,master"
 **Optional** - Customize the commit message that gets added to the merge commit.
 
 ### `slack_webhook_tag_user_id`
-**Optional** - Id of one or more slack users you want to tag in the message, for example: "<@U3P5KJ6SH><@U0MD57CMC><@UAQ9TESKU>"
+**Optional** - Member Id of one or more slack users you want to tag in the message, for example: "<@H1H1HH1HH><@H1H1HH1HH><@H1H1HH1HH>"

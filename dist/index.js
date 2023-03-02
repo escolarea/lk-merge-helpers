@@ -14621,6 +14621,9 @@ const core = __nccwpck_require__(2186);
 async function run() {
   let branchesError = "";
   let branchesSuccess = "";
+  const branches = [];
+  let branches_page = 1;
+  const branches_per_page = 100;// Max of branches per page allowed.
   try {
     const token = core.getInput("github_token");
     const source_ref = core.getInput("source_ref");
@@ -14629,16 +14632,20 @@ async function run() {
       "branches_to_merge_automatically"
     );
     const octokit = github.getOctokit(token);
-
     const repo = github.context.repo;
     const formatBranch = branchesAutomatically.split(",");
 
-    const { data } = await octokit.rest.repos.listBranches({
-      owner: repo.owner,
-      repo: repo.repo,
-    });
+    let branchesBatch = await getBranchesBatch(repo, octokit, branches_page, branches_per_page);
+    while (branchesBatch.length === branches_per_page) {
+      branches.push.apply(branches, branchesBatch);
+      branches_page++;
+      branchesBatch = await getBranchesBatch(repo, octokit, branches_page, branches_per_page);
+    }
+    branches.push.apply(branches, branchesBatch);
 
-    for (const currentBranch of data) {
+    core.info(`Branches total size ${branches.length}.`);
+
+    for (const currentBranch of branches) {
       for (const element of formatBranch) {
         if (new RegExp(element).test(currentBranch.name)) {
           let commitMessage = commit_message_template
@@ -14663,6 +14670,21 @@ async function run() {
     sendNotificationSlack(branchesSuccess, branchesError);
   } catch (e) {
     core.setFailed(`Error Merge: ${e.message}`);
+  }
+}
+
+async function getBranchesBatch(repo, octokit, branches_page, branches_per_page) {
+  try {
+    const { data } = await octokit.rest.repos.listBranches({
+      owner: repo.owner,
+      repo: repo.repo,
+      per_page: branches_per_page,
+      page: branches_page,
+    });
+    if (Array.isArray(data)) return data;
+    return [];
+  } catch (error) {
+    core.setFailed(`Error Slack: ${error.message}`);
   }
 }
 
